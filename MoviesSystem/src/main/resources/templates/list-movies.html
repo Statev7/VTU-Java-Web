@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:each="movie :${movies}">
+        <p th:text="${movie.name}"></p>
+        <p th:text="${movie.genreName}"></p>
+        <img th:src="${movie.imageUrl}"/>
+    </div>
+</body>
+</html>
