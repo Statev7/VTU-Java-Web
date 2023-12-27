@@ -9,6 +9,7 @@ import com.example.MoviesSystem.features.movies.models.MovieViewModel;
 import com.example.MoviesSystem.features.movies.services.contracts.MovieService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +31,7 @@ public class MovieServiceImpl implements MovieService {
                 .sorted((m1, m2) -> m2.getCreatedOn().compareTo(m1.getCreatedOn()))
                 .map((m) -> MovieViewModel
                         .builder()
+                        .id(m.getId())
                         .name(m.getName())
                         .description(m.getDescription())
                         .imageUrl(m.getImageUrl())
@@ -39,7 +41,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void Create(MovieFormModel movie) throws Exception {
+    public void create(MovieFormModel movie) throws Exception {
 
         Genre genre = this.genreRepository.findById(movie.genreId).get();
 
@@ -53,5 +55,48 @@ public class MovieServiceImpl implements MovieService {
                .build();
 
        this.movieRepository.save(movieToAdd);
+    }
+
+    @Override
+    public void update(long id, MovieFormModel movie) {
+        Genre genre = this.genreRepository.findById(movie.getGenreId()).get();
+        Movie movieToUpdate = this.movieRepository.findById(id).get();
+
+        movieToUpdate.setName(movie.name);
+        movieToUpdate.setDescription(movie.description);
+        movieToUpdate.setImageUrl(movie.imageUrl);
+        movieToUpdate.setGenre(genre);
+
+        this.movieRepository.save(movieToUpdate);
+    }
+
+    @Override
+    public void delete(long id) throws Exception {
+        Movie movieToDelete = this.movieRepository.findById(id).get();
+
+        if(movieToDelete == null){
+            throw new Exception("Invalid movie");
+        }
+
+        this.movieRepository.delete(movieToDelete);
+    }
+
+    @Override
+    public MovieFormModel findById(long id) throws Exception {
+        Movie movie = this.movieRepository.findById(id).get();
+
+        if(movie == null){
+            throw new Exception("Invalid movie");
+        }
+
+        MovieFormModel movieToReturn = MovieFormModel
+                .builder()
+                .name(movie.getName())
+                .description(movie.getDescription())
+                .imageUrl(movie.getImageUrl())
+                .genreId(movie.getGenre().getId())
+                .build();
+
+        return movieToReturn;
     }
 }

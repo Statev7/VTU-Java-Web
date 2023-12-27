@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class MovieViewModel {
+    public  long id;
     public String name;
     public String description;
     public String imageUrl;

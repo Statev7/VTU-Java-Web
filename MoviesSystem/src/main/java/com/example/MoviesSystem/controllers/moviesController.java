@@ -1,5 +1,6 @@
 package com.example.MoviesSystem.controllers;
 
+import com.example.MoviesSystem.data.models.Movie;
 import com.example.MoviesSystem.features.genres.services.contracts.GenreService;
 import com.example.MoviesSystem.features.movies.models.MovieFormModel;
 import com.example.MoviesSystem.features.movies.models.MovieViewModel;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
@@ -41,8 +43,33 @@ public class moviesController {
     }
 
     @PostMapping("/movies/create")
-    public String saveClub(@ModelAttribute("movie") MovieFormModel movie) throws Exception {
-        this.movieService.Create(movie);
+    public String saveMovie(@ModelAttribute("movie") MovieFormModel movie) throws Exception {
+        this.movieService.create(movie);
+
+        return "redirect:/movies";
+    }
+
+    @GetMapping("/movies/update/{id}")
+    public String update(@PathVariable("id") long id, Model model) throws Exception {
+        MovieFormModel movie = this.movieService.findById(id);
+        movie.genres = this.genreService.getAll();
+
+        model.addAttribute("id", id);
+        model.addAttribute("movie", movie);
+
+        return  "update-movie";
+    }
+
+    @PostMapping("/movies/update/{id}")
+    public String update(@PathVariable("id") long id, @ModelAttribute("movie") MovieFormModel movie){
+        this.movieService.update(id, movie);
+
+        return "redirect:/movies";
+    }
+
+    @GetMapping("/movies/delete/{id}")
+    public String delete(@PathVariable("id") long id) throws Exception {
+        this.movieService.delete(id);
 
         return "redirect:/movies";
     }
