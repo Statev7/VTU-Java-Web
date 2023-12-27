@@ -1,14 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-    <div th:each="movie :${movies}">
-        <p th:text="${movie.name}"></p>
-        <p th:text="${movie.genreName}"></p>
-        <img th:src="${movie.imageUrl}"/>
+    <div layout:fragment="body" class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            <div th:each="movie :${movies}" class="col mb-5">
+                <div class="card h-100">
+                    <!-- Product image-->
+                    <img class="card-img-top" th:src="${movie.imageUrl}">
+                    <!-- Product details-->
+                    <div class="card-body p-4">
+                        <div class="text-center mb-3">
+                            <!-- Product name-->
+                            <h5 class="fw-bolder" th:text="${movie.name}"></h5>
+                            <!-- Product price-->
+                            <span th:text="${movie.genreName}" class="bg-dark p-1 rounded text-white font-weight-bold"></span>
+                        </div>
+                        <div>
+                            <p style="font-size: 14px; line-height: 1.2" th:text="${movie.description}"></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
