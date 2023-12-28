@@ -1,12 +1,14 @@
 package com.example.MoviesSystem.features.movies.services.contracts;
 
+import com.example.MoviesSystem.features.movies.models.ListMoviesViewModel;
 import com.example.MoviesSystem.features.movies.models.MovieFormModel;
 import com.example.MoviesSystem.features.movies.models.MovieViewModel;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MovieService {
-    List<MovieViewModel> getAll();
+    ListMoviesViewModel getAll(String search);
 
     void create(MovieFormModel movie) throws Exception;
 

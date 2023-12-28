@@ -2,17 +2,16 @@ package com.example.MoviesSystem.controllers;
 
 import com.example.MoviesSystem.data.models.Movie;
 import com.example.MoviesSystem.features.genres.services.contracts.GenreService;
+import com.example.MoviesSystem.features.movies.models.ListMoviesViewModel;
 import com.example.MoviesSystem.features.movies.models.MovieFormModel;
 import com.example.MoviesSystem.features.movies.models.MovieViewModel;
 import com.example.MoviesSystem.features.movies.services.contracts.MovieService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class moviesController {
@@ -25,9 +24,9 @@ public class moviesController {
     }
 
     @GetMapping("/movies")
-    public String listMovies(Model model){
-        List<MovieViewModel> movies = this.movieService.getAll();
-        model.addAttribute("movies", movies);
+    public String listMovies(@RequestParam Optional<String> search, Model model){
+        ListMoviesViewModel movies = this.movieService.getAll(search.orElse(""));
+        model.addAttribute("model", movies);
 
         return "list-movies";
     }

@@ -9,8 +9,16 @@
 </head>
 <body>
     <div layout:fragment="body" class="container px-4 px-lg-5 mt-5">
-        <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
-            <div th:each="movie :${movies}" class="col mb-5">
+
+        <form class="mb-3" method="get" th:action="@{/movies}">
+            <div class="d-flex w-50 gap-2">
+                <input class="form-control w-50" type="text" th:field="*{model.search}">
+                <button class="btn btn-primary w-25" type="submit">Search</button>
+            </div>
+        </form>
+
+        <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-3">
+            <div th:each="movie :${model.movies}" class="col mb-5">
                 <div class="card h-100">
                     <!-- Product image-->
                     <img class="card-img-top" th:src="${movie.imageUrl}">

@@ -4,13 +4,16 @@ import com.example.MoviesSystem.data.models.Genre;
 import com.example.MoviesSystem.data.models.Movie;
 import com.example.MoviesSystem.data.repositories.GenreRepository;
 import com.example.MoviesSystem.data.repositories.MovieRepository;
+import com.example.MoviesSystem.features.movies.models.ListMoviesViewModel;
 import com.example.MoviesSystem.features.movies.models.MovieFormModel;
 import com.example.MoviesSystem.features.movies.models.MovieViewModel;
 import com.example.MoviesSystem.features.movies.services.contracts.MovieService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,20 +27,34 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<MovieViewModel> getAll() {
-        return this.movieRepository
-                .findAll()
-                .stream()
-                .sorted((m1, m2) -> m2.getCreatedOn().compareTo(m1.getCreatedOn()))
-                .map((m) -> MovieViewModel
-                        .builder()
-                        .id(m.getId())
-                        .name(m.getName())
-                        .description(m.getDescription())
-                        .imageUrl(m.getImageUrl())
-                        .genreName(m.getGenre().getName())
-                        .build())
-                .collect(Collectors.toList());
+    public ListMoviesViewModel getAll(String search) {
+
+        List<Movie> movies = new ArrayList<>();
+
+        if(search.isEmpty()){
+            movies = this.movieRepository.findAll();
+        }
+        else{
+            movies = this.movieRepository.search(search);
+        }
+
+        ListMoviesViewModel viewModel = new ListMoviesViewModel();
+
+        viewModel.search = search;
+        viewModel.movies = movies
+                            .stream()
+                            .sorted((m1, m2) -> m2.getCreatedOn().compareTo(m1.getCreatedOn()))
+                            .map((m) -> MovieViewModel
+                                    .builder()
+                                    .id(m.getId())
+                                    .name(m.getName())
+                                    .description(m.getDescription())
+                                    .imageUrl(m.getImageUrl())
+                                    .genreName(m.getGenre().getName())
+                                    .build())
+                            .collect(Collectors.toList());
+
+        return viewModel;
     }
 
     @Override
