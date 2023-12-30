@@ -6,8 +6,10 @@ import com.example.MoviesSystem.features.movies.models.ListMoviesViewModel;
 import com.example.MoviesSystem.features.movies.models.MovieFormModel;
 import com.example.MoviesSystem.features.movies.models.MovieViewModel;
 import com.example.MoviesSystem.features.movies.services.contracts.MovieService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,7 +44,14 @@ public class moviesController {
     }
 
     @PostMapping("/movies/create")
-    public String saveMovie(@ModelAttribute("movie") MovieFormModel movie) throws Exception {
+    public String saveMovie(@Valid @ModelAttribute("movie") MovieFormModel movie, BindingResult bindingResult) throws Exception {
+
+        if(bindingResult.hasErrors()){
+            movie.genres = this.genreService.getAll();
+
+            return  "create-movie";
+        }
+
         this.movieService.create(movie);
 
         return "redirect:/movies";
@@ -60,7 +69,14 @@ public class moviesController {
     }
 
     @PostMapping("/movies/update/{id}")
-    public String update(@PathVariable("id") long id, @ModelAttribute("movie") MovieFormModel movie){
+    public String update(@PathVariable("id") long id, @Valid @ModelAttribute("movie") MovieFormModel movie, BindingResult bindingResult){
+
+        if(bindingResult.hasErrors()){
+            movie.genres = this.genreService.getAll();
+
+            return "update-movie";
+        }
+
         this.movieService.update(id, movie);
 
         return "redirect:/movies";

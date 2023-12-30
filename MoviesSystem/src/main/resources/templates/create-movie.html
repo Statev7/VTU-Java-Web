@@ -15,22 +15,30 @@
             <div class="form-group mb-3">
                 <label class="control-label">Name</label>
                 <input th:field="*{name}" type="text" class="form-control" />
+                <p th:if="${#fields.hasErrors('name')}" class="text-danger" th:errors="*{name}"></p>
             </div>
             <div class="form-group mb-3">
                 <label class="control-label">Description</label>
-                <input th:field="*{description}" type="text" class="form-control" />
+                <textarea th:field="*{description}" class="form-control"></textarea>
+                <p th:if="${#fields.hasErrors('description')}" class="text-danger" th:errors="*{description}"></p>
             </div>
             <div class="form-group mb-3">
                 <label class="control-label">Image Url</label>
                 <input th:field="*{imageUrl}" type="text" class="form-control" />
+                <p th:if="${#fields.hasErrors('imageUrl')}" class="text-danger" th:errors="*{imageUrl}"></p>
             </div>
-            <select th:field="*{genreId}" class="form-select mb-3">
-                <option th:each="genre : ${movie.genres}"
-                        th:value="${genre.id}"
-                        th:text="${genre.Name}"></option>
-            </select>
+            <div class="form-group mb-3">
+                <label class="control-label">Genre</label>
+                <select th:field="*{genreId}" class="form-select">
+                    <option th:each="genre : ${movie.genres}"
+                            th:value="${genre.id}"
+                            th:text="${genre.Name}"></option>
+                </select>
+            </div>
 
-            <button type="submit" class="btn btn-primary">Create</button>
+            <div class="d-flex justify-content-center pt-2">
+                <button type="submit" class="btn btn-primary w-50">Create</button>
+            </div>
         </form>
 
     </div>
