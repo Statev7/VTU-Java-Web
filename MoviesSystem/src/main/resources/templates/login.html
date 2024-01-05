@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Movie</title>
+</head>
+<body layout:fragment="body">
+<section>
+    <div class="offset-4 col-4 mt-3">
+        <h4 class="text-center">Log in</h4>
+        <form role="form" method="post" th:action="@{/auth/login}">
+            <div th:if="${param.error}" class="alert alert-danger">
+                Invalid username or password.
+            </div>
+            <div th:if="${param.logout}" class="alert alert-success">
+                You have been logged out.
+            </div>
+            <div class="form-group mb-3">
+                <label class="control-label">Username</label>
+                <input id="username" name="username" type="text" class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label class="control-label">Password</label>
+                <input id="password" name="password" type="password" class="form-control" />
+            </div>
+
+            <div class="d-flex justify-content-center pt-2">
+                <button type="submit" value="Log in" class="btn btn-primary w-50">Login</button>
+            </div>
+        </form>
+
+    </div>
+</section>
+</body>
+</html>

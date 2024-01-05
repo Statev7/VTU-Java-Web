@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Movie</title>
+</head>
+<body layout:fragment="body">
+<section>
+    <div class="offset-4 col-4 mt-3">
+        <h4 class="text-center">Register</h4>
+        <form role="form" method="post" th:action="@{/auth/register}" th:object="${user}">
+            <div class="form-group mb-3">
+                <label class="control-label">Username</label>
+                <input th:field="*{username}" type="text" class="form-control" />
+                <p th:if="${#fields.hasErrors('username')}" class="text-danger" th:errors="*{username}"></p>
+            </div>
+            <div class="form-group mb-3">
+                <label class="control-label">Password</label>
+                <input th:field="*{password}" type="password" class="form-control" />
+                <p th:if="${#fields.hasErrors('password')}" class="text-danger" th:errors="*{password}"></p>
+            </div>
+
+            <div class="d-flex justify-content-center pt-2">
+                <button type="submit" class="btn btn-primary w-50">Register</button>
+            </div>
+        </form>
+
+    </div>
+</section>
+</body>
+</html>

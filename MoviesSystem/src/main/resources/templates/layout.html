@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Movies System</title>
@@ -16,6 +16,9 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                 <li class="nav-item"><a class="nav-link" th:href="@{/movies/create}">Create Movie</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/auth/login}">Login</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/auth/register}">Register</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/auth/logout}">Logout</a></li>
             </ul>
         </div>
     </div>

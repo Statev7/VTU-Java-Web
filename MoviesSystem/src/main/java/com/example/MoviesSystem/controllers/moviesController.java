@@ -1,33 +1,45 @@
 package com.example.MoviesSystem.controllers;
 
-import com.example.MoviesSystem.data.models.Movie;
+import com.example.MoviesSystem.common.GlobalConstants;
+import com.example.MoviesSystem.data.models.ApplicationUser;
 import com.example.MoviesSystem.features.genres.services.contracts.GenreService;
 import com.example.MoviesSystem.features.movies.models.ListMoviesViewModel;
 import com.example.MoviesSystem.features.movies.models.MovieFormModel;
-import com.example.MoviesSystem.features.movies.models.MovieViewModel;
 import com.example.MoviesSystem.features.movies.services.contracts.MovieService;
+import com.example.MoviesSystem.features.users.services.contracts.UserService;
+import com.example.MoviesSystem.security.SecurityConfig;
+import com.example.MoviesSystem.security.SecurityUtil;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @Controller
-public class moviesController {
+public class MoviesController {
     private MovieService movieService;
     private GenreService genreService;
+    private UserService userService;
 
-    public moviesController(MovieService movieService, GenreService genreService) {
+    public MoviesController(MovieService movieService, GenreService genreService, UserService userService) {
         this.movieService = movieService;
         this.genreService = genreService;
+        this.userService = userService;
     }
 
     @GetMapping("/movies")
     public String listMovies(@RequestParam Optional<String> search, Model model){
         ListMoviesViewModel movies = this.movieService.getAll(search.orElse(""));
+
+        String currentUsername = SecurityUtil.getSessionUser();
+        if(this.userService.IsExistByUsername(currentUsername)){
+            String roleName = this.userService.getRoleNameByUsername(currentUsername);
+            boolean isAdmin = roleName.equals(GlobalConstants.ADMIN_ROLE);
+            model.addAttribute("isAdmin", isAdmin);
+        }
+
         model.addAttribute("model", movies);
 
         return "list-movies";
