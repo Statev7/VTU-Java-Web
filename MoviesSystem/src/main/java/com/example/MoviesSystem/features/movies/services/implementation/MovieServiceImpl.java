@@ -38,21 +38,22 @@ public class MovieServiceImpl implements MovieService {
             movies = this.movieRepository.search(search);
         }
 
-        ListMoviesViewModel viewModel = new ListMoviesViewModel();
+        var moviesList = movies
+                .stream()
+                .sorted((m1, m2) -> m2.getCreatedOn().compareTo(m1.getCreatedOn()))
+                    .map((m) -> MovieViewModel
+                            .builder()
+                            .id(m.getId())
+                            .name(m.getName())
+                            .description(m.getDescription())
+                            .imageUrl(m.getImageUrl())
+                            .genreName(m.getGenre().getName())
+                            .build())
+                    .collect(Collectors.toList());
 
-        viewModel.search = search;
-        viewModel.movies = movies
-                            .stream()
-                            .sorted((m1, m2) -> m2.getCreatedOn().compareTo(m1.getCreatedOn()))
-                            .map((m) -> MovieViewModel
-                                    .builder()
-                                    .id(m.getId())
-                                    .name(m.getName())
-                                    .description(m.getDescription())
-                                    .imageUrl(m.getImageUrl())
-                                    .genreName(m.getGenre().getName())
-                                    .build())
-                            .collect(Collectors.toList());
+        ListMoviesViewModel viewModel = new ListMoviesViewModel();
+        viewModel.setSearch(search);
+        viewModel.setMovies(moviesList);
 
         return viewModel;
     }
@@ -60,14 +61,14 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public void create(MovieFormModel movie) throws Exception {
 
-        Genre genre = this.genreRepository.findById(movie.genreId).get();
+        Genre genre = this.genreRepository.findById(movie.getGenreId()).get();
 
         if(genre == null) throw new Exception("Invalid genre");
 
        Movie movieToAdd = Movie.builder()
-               .name(movie.name)
-               .description(movie.description)
-               .imageUrl(movie.imageUrl)
+               .name(movie.getName())
+               .description(movie.getDescription())
+               .imageUrl(movie.getImageUrl())
                .genre(genre)
                .build();
 
@@ -79,9 +80,9 @@ public class MovieServiceImpl implements MovieService {
         Genre genre = this.genreRepository.findById(movie.getGenreId()).get();
         Movie movieToUpdate = this.movieRepository.findById(id).get();
 
-        movieToUpdate.setName(movie.name);
-        movieToUpdate.setDescription(movie.description);
-        movieToUpdate.setImageUrl(movie.imageUrl);
+        movieToUpdate.setName(movie.getName());
+        movieToUpdate.setDescription(movie.getDescription());
+        movieToUpdate.setImageUrl(movie.getImageUrl());
         movieToUpdate.setGenre(genre);
 
         this.movieRepository.save(movieToUpdate);

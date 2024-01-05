@@ -38,7 +38,7 @@ public class AuthController {
     @PostMapping("/auth/register")
     public String Register(@Valid @ModelAttribute("user") UserFormModel user, BindingResult bindingResult, Model model){
 
-        if(this.userService.IsExistByUsername(user.getUsername())){
+        if(this.userService.isExistByUsername(user.getUsername())){
             bindingResult.addError(new FieldError("user", "username", "This username is already taken."));
         }
 
@@ -46,7 +46,7 @@ public class AuthController {
             return "register";
         }
 
-        this.userService.Create(user);
+        this.userService.create(user);
 
         return "redirect:/auth/login";
     }

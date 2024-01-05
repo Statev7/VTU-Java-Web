@@ -1,13 +1,11 @@
 package com.example.MoviesSystem.controllers;
 
 import com.example.MoviesSystem.common.GlobalConstants;
-import com.example.MoviesSystem.data.models.ApplicationUser;
 import com.example.MoviesSystem.features.genres.services.contracts.GenreService;
 import com.example.MoviesSystem.features.movies.models.ListMoviesViewModel;
 import com.example.MoviesSystem.features.movies.models.MovieFormModel;
 import com.example.MoviesSystem.features.movies.services.contracts.MovieService;
 import com.example.MoviesSystem.features.users.services.contracts.UserService;
-import com.example.MoviesSystem.security.SecurityConfig;
 import com.example.MoviesSystem.security.SecurityUtil;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -34,7 +32,7 @@ public class MoviesController {
         ListMoviesViewModel movies = this.movieService.getAll(search.orElse(""));
 
         String currentUsername = SecurityUtil.getSessionUser();
-        if(this.userService.IsExistByUsername(currentUsername)){
+        if(this.userService.isExistByUsername(currentUsername)){
             String roleName = this.userService.getRoleNameByUsername(currentUsername);
             boolean isAdmin = roleName.equals(GlobalConstants.ADMIN_ROLE);
             model.addAttribute("isAdmin", isAdmin);

@@ -25,13 +25,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void Create(UserFormModel model) {
+    public void create(UserFormModel model) {
         ApplicationRole role = this.roleRepository.findByName(GlobalConstants.USER_ROLE);
 
         ApplicationUser userToCreate = ApplicationUser
                 .builder()
-                .username(model.username)
-                .password(passwordEncoder.encode(model.password))
+                .username(model.getUsername())
+                .password(passwordEncoder.encode(model.getPassword()))
                 .role(role)
                 .build();
 
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean IsExistByUsername(String username) {
+    public boolean isExistByUsername(String username) {
         ApplicationUser user = this.userRepository.findByUsername(username);
 
         return user != null;

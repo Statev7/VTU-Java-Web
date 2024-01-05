@@ -3,10 +3,7 @@ package com.example.MoviesSystem.features.movies.models;
 import com.example.MoviesSystem.features.genres.models.GenreViewModel;
 import com.example.MoviesSystem.features.movies.constants.ErrorMessages;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -16,11 +13,11 @@ import java.util.List;
 @AllArgsConstructor
 public class MovieFormModel {
     @NotEmpty(message = ErrorMessages.MOVIE_EMPTY_NAME)
-    public String name;
+    private String name;
     @NotEmpty(message = ErrorMessages.MOVIE_EMPTY_DESC)
-    public String description;
+    private String description;
     @NotEmpty(message = ErrorMessages.MOVIE_EMPTY_IMAGE)
-    public String imageUrl;
-    public long genreId;
+    private String imageUrl;
+    private long genreId;
     public List<GenreViewModel> genres;
 }

@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class GenreViewModel {
-    public long id;
-    public String name;
+    private long id;
+    private String name;
 }
