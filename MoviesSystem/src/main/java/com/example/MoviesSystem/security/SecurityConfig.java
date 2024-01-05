@@ -29,9 +29,7 @@ public class SecurityConfig {
             .authorizeHttpRequests((authz) -> authz
                 .requestMatchers("/movies/create", "/movies/update/**", "/movies/delete/**")
                     .hasAuthority(GlobalConstants.ADMIN_ROLE)
-                .requestMatchers("/auth/login", "/auth/register")
-                    .anonymous()
-                .requestMatchers("/movies", "/accessDenied")
+                .requestMatchers("/movies", "/accessDenied", "/auth/login", "/auth/register")
                     .permitAll()
             )
            .formLogin(f -> f
@@ -46,6 +44,7 @@ public class SecurityConfig {
         return http.build();
     }
 
+
     @Bean
     public static PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -54,5 +53,6 @@ public class SecurityConfig {
     public void configure(AuthenticationManagerBuilder builder) throws Exception {
         builder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
     }
+
 }
 

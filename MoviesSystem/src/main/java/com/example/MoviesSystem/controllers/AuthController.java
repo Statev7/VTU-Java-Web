@@ -2,6 +2,7 @@ package com.example.MoviesSystem.controllers;
 
 import com.example.MoviesSystem.features.users.models.UserFormModel;
 import com.example.MoviesSystem.features.users.services.contracts.UserService;
+import com.example.MoviesSystem.security.SecurityUtil;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,13 +23,20 @@ public class AuthController {
 
     @GetMapping("/auth/login")
     public String Login(){
-
+        if(SecurityUtil.getSessionUser() != null){
+            return "redirect:/movies";
+        }
+        
         return "login";
     }
 
 
     @GetMapping("/auth/register")
     public String Register(Model model){
+        if(SecurityUtil.getSessionUser() != null){
+            return "redirect:/movies";
+        }
+
         UserFormModel user = new UserFormModel();
         model.addAttribute("user", user);
 
