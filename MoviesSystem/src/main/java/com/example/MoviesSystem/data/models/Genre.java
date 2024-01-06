@@ -16,6 +16,12 @@ import java.util.Set;
 @Entity
 @Table(name = "Genres")
 public class Genre extends BaseModel {
+
+    public Genre(String name)
+    {
+        this.name = name;
+    }
+
     private String name;
 
     @OneToMany(mappedBy = "genre", cascade = CascadeType.REMOVE)
