@@ -12,4 +12,8 @@ import java.util.List;
 public class ListMoviesViewModel {
     private String search;
     private List<MovieViewModel> movies;
+    private Integer pageNumber;
+    private Integer total;
+    private boolean hasNext;
+    private boolean hasPrevious;
 }

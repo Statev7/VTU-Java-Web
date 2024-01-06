@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MovieService {
-    ListMoviesViewModel getAll(String search);
+    ListMoviesViewModel getAll(String search, Integer page);
 
     void create(MovieFormModel movie) throws Exception;
 

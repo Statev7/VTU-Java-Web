@@ -26,7 +26,7 @@ public class AuthController {
         if(SecurityUtil.getSessionUser() != null){
             return "redirect:/movies";
         }
-        
+
         return "login";
     }
 

@@ -28,8 +28,11 @@ public class MoviesController {
     }
 
     @GetMapping("/movies")
-    public String listMovies(@RequestParam Optional<String> search, Model model){
-        ListMoviesViewModel movies = this.movieService.getAll(search.orElse(""));
+    public String listMovies(
+            @RequestParam Optional<String> search,
+            @RequestParam Optional<Integer> page,
+            Model model){
+        ListMoviesViewModel movies = this.movieService.getAll(search.orElse(""), page.orElse(0));
 
         String currentUsername = SecurityUtil.getSessionUser();
         if(this.userService.isExistByUsername(currentUsername)){

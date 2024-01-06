@@ -8,6 +8,8 @@ import com.example.MoviesSystem.features.movies.models.ListMoviesViewModel;
 import com.example.MoviesSystem.features.movies.models.MovieFormModel;
 import com.example.MoviesSystem.features.movies.models.MovieViewModel;
 import com.example.MoviesSystem.features.movies.services.contracts.MovieService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class MovieServiceImpl implements MovieService {
+    private final Integer ENTITIES_PER_PAGE = 3;
+
     private MovieRepository movieRepository;
     private GenreRepository genreRepository;
 
@@ -27,18 +31,21 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public ListMoviesViewModel getAll(String search) {
+    public ListMoviesViewModel getAll(String search, Integer page) {
 
-        List<Movie> movies = new ArrayList<>();
+        long totalEntities = this.movieRepository.count();
+        int totalPages = (int) Math.ceil((double) totalEntities / (double) ENTITIES_PER_PAGE) - 1;
 
-        if(search.isEmpty()){
-            movies = this.movieRepository.findAll();
+        if(page < 0){
+            page = 0;
+        } else if (page > totalPages) {
+            page = totalPages;
         }
-        else{
-            movies = this.movieRepository.search(search);
-        }
+
+        Page<Movie> movies = this.movieRepository.search(search, PageRequest.of(page, ENTITIES_PER_PAGE));
 
         var moviesList = movies
+                .getContent()
                 .stream()
                 .sorted((m1, m2) -> m2.getCreatedOn().compareTo(m1.getCreatedOn()))
                     .map((m) -> MovieViewModel
@@ -54,6 +61,10 @@ public class MovieServiceImpl implements MovieService {
         ListMoviesViewModel viewModel = new ListMoviesViewModel();
         viewModel.setSearch(search);
         viewModel.setMovies(moviesList);
+        viewModel.setTotal(movies.getTotalPages());
+        viewModel.setPageNumber(page);
+        viewModel.setHasNext(movies.hasNext());
+        viewModel.setHasPrevious(movies.hasPrevious());
 
         return viewModel;
     }
